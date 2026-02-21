@@ -1,6 +1,14 @@
-# ai-html-card
+# make-gpt-human-again
+
+> The movement to restore GPT's humanity. One card at a time.
+
+Turn any text into a beautiful mobile card image using AI — powered by Puppeteer.
+
+Supports an optional "humanize" step: let AI translate a technical summary into plain language first, then render it as a card.
 
 > 🇨🇳 中文文档：[README.zh.md](./README.zh.md)
+
+---
 
 ## 🤖 AI-Assisted Setup
 
@@ -14,27 +22,23 @@ The AI will guide you through environment checks, dependency installation, and A
 
 ---
 
-把任意文本通过 AI 生成精美的手机竖屏 HTML 卡片，用 Puppeteer 渲染成 PNG 图片。
+## Features
 
-支持可选的"人话翻译"步骤：先让 AI 把技术摘要翻译成口语化解释，再生成卡片。
+- Dark Apple/Meizu keynote style
+- 390px mobile portrait, 2x HiDPI rendering
+- Rounded cards, generous whitespace, premium feel
+- CJK font support (requires `fonts-noto-cjk`, see below)
 
-## 效果
+## Quick Start
 
-- 深色苹果/魅族发布会风格
-- 390px 手机竖屏，2x 高清渲染
-- 圆角卡片，充足留白，高级感
-- 支持中文（需安装 Noto Sans CJK 字体，见下方）
-
-## 快速开始
-
-### 1. 安装依赖
+### 1. Install dependencies
 
 ```bash
-npm install puppeteer
+npm install
 ```
 
-> **中文字体（重要）**
-> 如果内容包含中文，必须安装 Noto Sans CJK 字体，否则中文会显示为方块：
+> **CJK fonts (important)**
+> If your content includes Chinese/Japanese/Korean text, install Noto Sans CJK, otherwise text renders as boxes:
 >
 > ```bash
 > # Debian / Ubuntu
@@ -43,80 +47,79 @@ npm install puppeteer
 > # Arch Linux
 > pacman -S noto-fonts-cjk
 >
-> # macOS (Homebrew)
+> # macOS
 > brew install --cask font-noto-sans-cjk
 >
-> # 验证安装
+> # Verify
 > fc-list | grep -i "Noto Sans CJK"
 > ```
 
-### 2. 配置环境变量
+### 2. Configure environment
 
 ```bash
 export OPENAI_API_KEY="your-api-key"
-export OPENAI_API_BASE="https://api.openai.com/v1"   # 或任何 OpenAI 兼容接口
-export OPENAI_MODEL="gpt-4o-mini"                    # 可选，默认 gemini-2.0-flash
+export OPENAI_API_BASE="https://api.openai.com/v1"   # or any OpenAI-compatible endpoint
+export OPENAI_MODEL="gpt-4o"                          # optional
 ```
 
-### 3. 使用
+### 3. Use
 
 ```bash
-# 直接生成卡片（文本 → HTML → PNG）
-echo "你的内容" | node scripts/card.js
-# 输出：/tmp/ai-card-xxx.png
+# Generate a card (text → HTML → PNG)
+echo "Your content here" | node scripts/card.js
+# Output: /tmp/ai-card-xxx.png
 
-# 先翻译成口语，再生成卡片（完整流水线）
-echo "技术摘要" | node scripts/pipeline.js
+# Full pipeline: humanize first, then generate card
+echo "Technical summary" | node scripts/pipeline.js
 
-# 只做人话翻译（纯文本输出）
-echo "技术摘要" | node scripts/humanize.js
+# Humanize only (plain text output)
+echo "Technical summary" | node scripts/humanize.js
 ```
 
-## 自定义 Prompt
+## Custom Prompts
 
-默认 prompt 在 `prompts/` 目录下，可以直接编辑，也可以通过环境变量指定自定义文件：
+Default prompts are in the `prompts/` directory. Edit them directly, or point to a custom file via env vars:
 
 ```bash
-# 自定义卡片设计 prompt
 export CARD_PROMPT_FILE="/path/to/my-card-prompt.txt"
-
-# 自定义人话翻译 prompt
 export HUMANIZE_PROMPT_FILE="/path/to/my-humanize-prompt.txt"
 ```
 
-## 环境变量一览
+## Environment Variables
 
-| 变量 | 必需 | 默认值 | 说明 |
-|------|------|--------|------|
-| `OPENAI_API_KEY` | ✅ | — | API 密钥 |
-| `OPENAI_API_BASE` | ✅ | — | API 基础 URL（OpenAI 兼容） |
-| `OPENAI_MODEL` | ❌ | `gemini-2.0-flash` | 模型名称 |
-| `CARD_PROMPT_FILE` | ❌ | `prompts/card-design.txt` | 卡片设计 prompt 文件路径 |
-| `HUMANIZE_PROMPT_FILE` | ❌ | `prompts/humanize.txt` | 人话翻译 prompt 文件路径 |
-| `CARD_DPR` | ❌ | `2` | 渲染倍率（2=780px 实际宽度） |
-| `CARD_WIDTH` | ❌ | `390` | 卡片 CSS 宽度（px） |
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `OPENAI_API_KEY` | ✅ | — | API key |
+| `OPENAI_API_BASE` | ✅ | — | API base URL (OpenAI-compatible) |
+| `OPENAI_MODEL` | ❌ | `gemini-2.5-flash` | Model name |
+| `CARD_PROMPT_FILE` | ❌ | `prompts/card-design.txt` | Card design prompt path |
+| `HUMANIZE_PROMPT_FILE` | ❌ | `prompts/humanize.txt` | Humanize prompt path |
+| `CARD_DPR` | ❌ | `2` | Device pixel ratio (2 = 780px actual width) |
+| `CARD_WIDTH` | ❌ | `390` | Card CSS width (px) |
 
-## 文件结构
+## File Structure
 
 ```
-ai-html-card/
+make-gpt-human-again/
+├── AI-SETUP.md        ← AI-readable setup guide
+├── README.md          ← English docs (this file)
+├── README.zh.md       ← Chinese docs
 ├── scripts/
-│   ├── card.js        # 文本 → HTML → PNG
-│   ├── humanize.js    # 文本 → 口语化文本
-│   ├── pipeline.js    # 完整流水线（humanize → card）
-│   └── render.js      # Puppeteer 渲染器
+│   ├── card.js        # text → HTML → PNG
+│   ├── humanize.js    # text → plain language
+│   ├── pipeline.js    # full pipeline (humanize → card)
+│   └── render.js      # Puppeteer renderer
 ├── prompts/
-│   ├── card-design.txt    # 卡片设计 prompt（可自定义）
-│   └── humanize.txt       # 人话翻译 prompt（可自定义）
-└── README.md
+│   ├── card-design.txt    # card design prompt (customizable)
+│   └── humanize.txt       # humanize prompt (customizable)
+└── package.json
 ```
 
-## 依赖
+## Requirements
 
-- Node.js 18+（需要原生 `fetch` 和 ES modules）
-- `puppeteer`（npm install）
-- Chromium（puppeteer 自动下载，或系统已安装）
-- 中文字体：`fonts-noto-cjk`（可选，中文内容必需）
+- Node.js 18+ (native `fetch` + ES modules)
+- `puppeteer` (auto-downloads Chromium)
+- CJK fonts: `fonts-noto-cjk` (optional, required for CJK text)
 
 ## License
 
