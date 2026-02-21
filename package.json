@@ -1,0 +1,20 @@
+{
+  "name": "ai-html-card",
+  "version": "1.0.0",
+  "description": "Text → AI HTML card → PNG via Puppeteer",
+  "type": "module",
+  "scripts": {
+    "card": "node scripts/card.js",
+    "humanize": "node scripts/humanize.js",
+    "pipeline": "node scripts/pipeline.js"
+  },
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "node-html-to-image": "^5.0.0",
+    "puppeteer": "^22.0.0",
+    "satori": "^0.19.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
