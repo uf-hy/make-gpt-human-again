@@ -1,10 +1,10 @@
 # make-gpt-human-again
 
-> The movement to restore GPT's humanity. One card at a time.
+> Make GPT sound human again.
 
-Feed any text to an AI and get it rewritten in a custom persona voice — the default is **fufu酱**, a sassy tsundere catgirl, but you can configure any style you like.
+Feed GPT output in, get it rewritten in any persona you want — the default is **fufu酱**, a sassy tsundere catgirl.
 
-Optionally renders the result as a beautiful mobile portrait PNG card.
+Supports concurrent model racing (multiple models run in parallel, fastest wins), automatic fallback, customizable personas, and optional auto-delivery to Telegram via OpenClaw.
 
 > 🇨🇳 中文文档：[README.md](./README.md)
 
@@ -12,27 +12,14 @@ Optionally renders the result as a beautiful mobile portrait PNG card.
 
 ## 🤖 AI-Assisted Setup
 
-Copy this to your AI assistant (Claude, ChatGPT, Cursor, etc.):
+**Tell your AI assistant:**
 
 ```
-Please read AI-SETUP.md in this project and help me install and configure it.
+Help me install this project: https://github.com/uf-hy/make-gpt-human-again
+Read the setup guide first: https://raw.githubusercontent.com/uf-hy/make-gpt-human-again/main/AI-SETUP.md
 ```
 
-The AI will walk you through environment setup, dependency installation, API configuration, persona customization, and testing.
-
----
-
-## Features
-
-- **Concurrent model racing** — multiple models run in parallel, fastest wins
-- **Automatic fallback chain** — if all primaries fail, tries fallbacks in order
-- **Fully customizable persona** — edit `prompts/humanize.txt`, no code changes needed
-- **Zero extra dependencies** — uses Node.js 18+ native fetch only
-- **OpenAI-compatible** — works with any `/v1/chat/completions` endpoint
-
----
-
-## Quick Start
+**Or do it yourself:**
 
 ```bash
 git clone https://github.com/uf-hy/make-gpt-human-again.git
@@ -44,12 +31,29 @@ echo "Server CPU has been above 95% for 10 minutes." | node scripts/humanize.js
 
 ---
 
-## Requirements
+## Features
 
-- **Node.js v18+** (uses native fetch)
-- Any OpenAI-compatible API (OpenAI, Gemini, Qwen, local LLMs, etc.)
+### 🎭 Persona Translation (humanize.js)
+Rewrites any text in a custom persona voice, outputs to stdout.
 
-Card rendering requires Puppeteer system dependencies (see AI-SETUP.md).
+```bash
+echo "Disk usage at 92%, recommend clearing logs" | node scripts/humanize.js
+```
+
+- **Concurrent racing** — multiple models run in parallel, fastest wins
+- **Fallback chain** — automatic sequential fallback if all primaries fail
+- **Zero dependencies** — Node.js 18+ only (native fetch)
+- **OpenAI-compatible** — any `/v1/chat/completions` endpoint works
+- **Custom persona** — edit `prompts/humanize.txt`, no code changes
+
+### 📱 OpenClaw Integration (optional)
+When used as an [OpenClaw](https://github.com/openclaw/openclaw) skill:
+- Auto-detect which Agent triggered the call
+- Auto-deliver translated text to Telegram via the correct Bot
+- Bidirectional context: inject `[CONTEXT_REF]` back into the session
+- Interleaved conversation context for tone consistency
+
+> See [SKILL.md](./SKILL.md) for OpenClaw integration details.
 
 ---
 
@@ -61,13 +65,9 @@ Copy `.env.example` to `.env`:
 OPENAI_API_KEY=sk-your-key-here
 OPENAI_API_BASE=https://api.openai.com/v1
 OPENAI_MODEL=gpt-4o-mini
-```
 
-**Concurrent racing** (optional):
-```env
-# Multiple models, comma-separated — run in parallel, fastest wins
+# Optional: race multiple models
 OPENAI_MODEL=gemini-2.0-flash,gpt-4o-mini
-# Fallback if all primaries fail
 HUMANIZE_FALLBACK_MODELS=gpt-4o
 ```
 
@@ -75,29 +75,7 @@ HUMANIZE_FALLBACK_MODELS=gpt-4o
 
 ## Custom Persona
 
-Edit `prompts/humanize.txt` with any style description. Restart to apply.
-
-The default is **fufu酱** — a tsundere devil-type catgirl with A-board kaomoji and Telegram HTML formatting rules.
-
----
-
-## File Structure
-
-```
-make-gpt-human-again/
-├── .env.example           Configuration template
-├── AI-SETUP.md            AI setup guide
-├── README.md              中文文档
-├── README.en.md           English documentation (this file)
-├── scripts/
-│   ├── humanize.js        Text → AI persona text (core)
-│   ├── card.js            Text → HTML card
-│   ├── pipeline.js        Full pipeline (humanize + card + render)
-│   └── render.js          Puppeteer PNG renderer
-└── prompts/
-    ├── humanize.txt       Persona style prompt (customizable)
-    └── card-design.txt    Card design prompt (customizable)
-```
+Edit `prompts/humanize.txt` with any style. Default is **fufu酱** (tsundere catgirl + kaomoji + Telegram HTML).
 
 ---
 

@@ -1,28 +1,37 @@
 # AI-SETUP.md — 安装向导
 
+> **项目地址：** https://github.com/uf-hy/make-gpt-human-again
+>
 > **语言规则：** 以用户当前使用的语言为准。用户说中文就用中文，说英文就用英文。
 >
-> 本文件供 AI 助手阅读。请按照以下步骤引导用户完成安装和配置，遇到需要用户决策的地方主动提问，不要假设。
+> 本文件供 AI 助手阅读。请按照以下步骤引导用户完成安装和配置，遇到需要决策的地方主动提问。
 
 ---
 
 ## 你的任务
 
-帮助用户完成 **make-gpt-human-again** 的安装、配置和测试。
+帮助用户安装并配置 **make-gpt-human-again**。
 
-这个工具的核心功能：把任意文本通过 AI 转成指定人设的口吻（默认是傲娇猫娘 fufu酱），结果输出到 stdout，可以接管道再做其他处理（比如渲染成卡片）。
-
-按以下步骤依次执行：
+这个工具把任意文本通过 AI 转成指定人设风格（默认傲娇猫娘 fufu酱），支持并发竞速和自动 fallback。
 
 ---
 
-## 第一步：检查 Node.js 版本
+## 第一步：克隆项目
+
+如果用户还没克隆：
+
+```bash
+git clone https://github.com/uf-hy/make-gpt-human-again.git
+cd make-gpt-human-again
+```
+
+检查 Node.js 版本：
 
 ```bash
 node --version
 ```
 
-需要 **v18 或以上**（使用了原生 fetch）。版本不够帮用户升级。
+需要 **v18+**（使用原生 fetch）。版本不够帮用户升级。
 
 ---
 
@@ -32,21 +41,21 @@ node --version
 cp .env.example .env
 ```
 
-打开 `.env`，帮用户填写以下内容：
+帮用户填写以下必填项：
 
 | 变量名 | 说明 |
 |--------|------|
-| `OPENAI_API_KEY` | 你的 API Key（任意 OpenAI 兼容服务均可） |
-| `OPENAI_API_BASE` | API Base URL，例如 `https://api.openai.com/v1` |
-| `OPENAI_MODEL` | 使用的模型名，例如 `gpt-4o-mini` 或 `gemini-2.0-flash` |
+| `OPENAI_API_KEY` | API Key（任意 OpenAI 兼容服务） |
+| `OPENAI_API_BASE` | Base URL，如 `https://api.openai.com/v1` |
+| `OPENAI_MODEL` | 模型名，如 `gpt-4o-mini`、`gemini-2.0-flash` |
 
-**可选但推荐：**
+**可选增强：**
 
 ```env
-# 多个模型用逗号分隔，并发竞速，最快的赢
+# 并发竞速（逗号分隔多个模型，同时跑，最快的赢）
 OPENAI_MODEL=gemini-2.0-flash,gpt-4o-mini
 
-# 主力全挂时的兜底
+# 兜底（主力全挂时顺序尝试）
 HUMANIZE_FALLBACK_MODELS=gpt-4o
 ```
 
@@ -54,72 +63,34 @@ HUMANIZE_FALLBACK_MODELS=gpt-4o
 
 ## 第三步：自定义人设（可选）
 
-人设配置文件在 `prompts/humanize.txt`，默认是 **fufu酱**（傲娇毒舌猫娘，带颜文字，Telegram HTML 格式）。
+人设文件：`prompts/humanize.txt`
 
-问用户：**「你想保留默认的 fufu酱 人设，还是自定义成别的风格？」**
+问用户：**「保留默认的 fufu酱 人设，还是自定义？」**
 
-- **保留默认** → 跳过，继续下一步
-- **自定义** → 打开 `prompts/humanize.txt` 编辑，写你想要的风格描述
-
-写人设的要点：
-1. 如何称呼用户
-2. 语气和性格特点
-3. 输出格式要求（如果要 Telegram HTML，参考默认文件的 Format 部分）
+- **保留** → 跳过
+- **自定义** → 编辑 `prompts/humanize.txt`，写任意风格描述即可
 
 ---
 
 ## 第四步：测试
 
 ```bash
-echo "服务器 CPU 使用率持续 10 分钟超过 95%，需要处理。" | node scripts/humanize.js
+echo "服务器 CPU 使用率持续 10 分钟超过 95%。" | node scripts/humanize.js
 ```
 
-或者英文：
+预期：文本被人设风格重新表达，stdout 输出结果，stderr 显示用了哪个模型。
 
-```bash
-echo "Server CPU has been above 95% for 10 minutes." | node scripts/humanize.js
-```
-
-预期输出：文本被用人设风格重新表达，结果输出到 stdout，stderr 显示使用了哪个模型。
-
----
-
-## 第五步：卡片渲染（可选）
-
-如果用户想要 PNG 卡片输出，需要 Puppeteer 依赖：
-
-```bash
-# 方案 A：让 Puppeteer 自动下载 Chromium
-npx puppeteer browsers install chrome
-
-# 方案 B：使用系统 Chromium（服务器环境推荐）
-apt-get install -y chromium-browser
-```
-
-然后运行完整流水线：
-
-```bash
-echo "你的文本" | node scripts/pipeline.js
-```
-
-这会依次执行：humanize → 生成 HTML 卡片 → 渲染成 PNG。
+如果成功，安装完成！
 
 ---
 
 ## 常见问题
 
 **"OPENAI_API_KEY and OPENAI_API_BASE must be set"**
-→ 检查 `.env` 文件是否存在，变量名是否正确，值不需要加引号。
+→ 检查 `.env` 是否存在，变量名是否正确。
 
-**模型超时**
-→ 在 `.env` 增大 `HUMANIZE_TIMEOUT_MS`（默认 60000 毫秒）。
-→ 或者换一个响应更快的模型。
+**超时**
+→ `.env` 加 `HUMANIZE_TIMEOUT_MS=120000`（默认 60 秒）。
 
-**卡片中文字体显示异常**
-→ 安装 Noto CJK 字体：`apt-get install -y fonts-noto-cjk`
-
----
-
-## 完成！
-
-配置好之后，把任意文本通过管道传给 `humanize.js`，就能得到人设风格的输出。支持组合到任何脚本流水线里。
+**想接入 OpenClaw 自动发 Telegram**
+→ 参考 `SKILL.md`，把本项目作为 OpenClaw skill 使用。
