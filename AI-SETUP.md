@@ -81,7 +81,7 @@ env | grep -i "TELEGRAM\|CHAT_ID" 2>/dev/null
 | 找到 API Key/Base | 自动写入 .env |
 | 找到可用的 Gemini Flash 模型 | 自动配为主力模型 |
 | 没找到合适模型 | 使用默认（gemini-3-flash + gemini-2.5-flash） |
-| 找到 SOUL.md | 自动提取人设名/用户称呼，同步到 prompts/humanize.txt |
+| 找到 SOUL.md | 自动提取人设名/用户称呼，同步到 prompts/style.txt |
 | 检测到 OpenClaw | 自动配置 skill 目录和 Telegram |
 | 找到 Telegram Chat ID | 自动写入 .env |
 
@@ -103,7 +103,7 @@ if [ -n "$WORKSPACE" ]; then
   mkdir -p "$SKILL_DIR/scripts" "$SKILL_DIR/prompts"
   cp scripts/humanize-output.js "$SKILL_DIR/scripts/"
   cp scripts/auto-send.mjs "$SKILL_DIR/scripts/"
-  cp prompts/humanize.txt "$SKILL_DIR/prompts/"
+  cp prompts/style.txt "$SKILL_DIR/prompts/"
   cp .env "$SKILL_DIR/.env"
   cp SKILL.md "$SKILL_DIR/SKILL.md"
 fi
@@ -179,7 +179,7 @@ printf '%s' "..." | node /home/user/clawd/skills/humanize-output/scripts/humaniz
 
 - **全部按推荐** → 直接写入配置，跳到测试
 - **换模型** → 展示可选模型列表，用按钮选择
-- **自定义人设** → 提示编辑 `prompts/humanize.txt`
+- **自定义人设** → 提示编辑 `prompts/style.txt`
 - **不启用 Telegram** → 跳过 Telegram 相关配置
 
 如果有需要用户手动提供的信息（API Key、Chat ID），在这一步一并收集。
@@ -244,12 +244,12 @@ echo "服务器 CPU 使用率持续超过 95%，建议排查。" | node scripts/
 **已有 OpenClaw 但检测不到**
 → 检查 `~/.openclaw/` 目录是否存在，`openclaw` 是否在 PATH 中。
 
-## 人设同步细节（SOUL.md → prompts/humanize.txt）
+## 人设同步细节（SOUL.md → prompts/style.txt）
 
 当检测到 SOUL.md 时（无论 YOLO 或交互模式），同步逻辑为：
 1. 从 SOUL.md 提取人设描述（性格、口癖、说话风格、称呼）
-2. 整合到 `prompts/humanize.txt` 的人设描述区域
-3. **保留** `prompts/humanize.txt` 中的格式规则不动（HTML 格式、%%SPLIT%% 分段、[BTN:] 按钮语法、kaomoji 规则等）
+2. 整合到 `prompts/style.txt` 的人设描述区域
+3. **保留** `prompts/style.txt` 中的格式规则不动（HTML 格式、%%SPLIT%% 分段、[BTN:] 按钮语法、kaomoji 规则等）
 4. 将人设名写入 `HUMANIZE_PERSONA_NAME`，用户称呼写入 `HUMANIZE_USER_NAME`
 
 ---

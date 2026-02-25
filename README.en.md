@@ -44,7 +44,7 @@ echo "Disk usage at 92%, recommend clearing logs" | node scripts/humanize.js
 - **Fallback chain** — automatic sequential fallback if all primaries fail
 - **Zero dependencies** — Node.js 18+ only (native fetch)
 - **OpenAI-compatible** — any `/v1/chat/completions` endpoint works
-- **Custom persona** — edit `prompts/humanize.txt`, no code changes
+- **Custom persona** — edit `prompts/style.txt`, no code changes
 
 ### 📱 OpenClaw Integration (optional)
 When used as an [OpenClaw](https://github.com/openclaw/openclaw) skill:
@@ -80,7 +80,7 @@ HUMANIZE_FALLBACK_MODELS=gemini-2.5-flash
 
 ## Custom Persona
 
-Edit `prompts/humanize.txt` with any style. Default is **fufu酱** (tsundere catgirl + kaomoji + Telegram HTML).
+Edit `prompts/style.txt` with any style. Default is **fufu酱** (tsundere catgirl + kaomoji + Telegram HTML).
 
 ---
 

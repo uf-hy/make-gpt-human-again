@@ -27,7 +27,7 @@ printf '%s' "GPT 原始输出" | node scripts/humanize-output.js --stdout
 - **并发竞速** — 多个模型同时跑，最快的赢
 - **自动 fallback** — 主力全挂，按顺序尝试兜底模型
 - **零依赖** — 只需 Node.js 18+（原生 fetch）
-- **自定义人设** — 编辑 `prompts/humanize.txt`，不用碰代码
+- **自定义人设** — 编辑 `prompts/style.txt`，不用碰代码
 
 ## OpenClaw 集成
 

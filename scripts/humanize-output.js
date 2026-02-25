@@ -86,9 +86,9 @@ function isContextEnabled() {
 
 // ─── Style prompt ─────────────────────────────────────────────────────────────
 
-/** Load persona system prompt from prompts/humanize.txt (falls back to inline default) */
+/** Load persona system prompt from prompts/style.txt (falls back to inline default) */
 function loadStylePrompt() {
-  const promptPath = path.join(SKILL_ROOT, 'prompts', 'humanize.txt');
+  const promptPath = path.join(SKILL_ROOT, 'prompts', 'style.txt');
   try {
     return fs.readFileSync(promptPath, 'utf8').trim();
   } catch {

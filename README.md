@@ -46,7 +46,7 @@ echo "磁盘使用率 92%，建议清理日志" | node scripts/humanize.js
 - **fallback 链**：主力全挂自动切备用
 - **零额外依赖**：只需 Node.js 18+（原生 fetch）
 - **OpenAI 兼容**：任何 `/v1/chat/completions` 接口都能用
-- **人设可自定义**：改 `prompts/humanize.txt`，不用碰代码
+- **人设可自定义**：改 `prompts/style.txt`，不用碰代码
 
 ### 📱 OpenClaw 集成（可选）
 如果你使用 [OpenClaw](https://github.com/openclaw/openclaw)，humanize-output skill 版本额外支持：
@@ -83,7 +83,7 @@ HUMANIZE_FALLBACK_MODELS=gemini-2.5-flash
 
 ## 自定义人设
 
-编辑 `prompts/humanize.txt`，写任何你想要的风格。默认是 **fufu酱**（傲娇猫娘 + A 岛颜文字 + Telegram HTML）。
+编辑 `prompts/style.txt`，写任何你想要的风格。默认是 **fufu酱**（傲娇猫娘 + A 岛颜文字 + Telegram HTML）。
 
 改完直接生效，不用碰代码。
 
@@ -99,7 +99,7 @@ make-gpt-human-again/
 ├── scripts/
 │   └── humanize.js        核心：文本 → 人设风格文本
 └── prompts/
-    └── humanize.txt       人设风格 prompt（可自定义）
+    └── style.txt       人设风格 prompt（可自定义）
 ```
 
 ---
