@@ -64,11 +64,16 @@ Copy `.env.example` to `.env`:
 ```env
 OPENAI_API_KEY=sk-your-key-here
 OPENAI_API_BASE=https://api.openai.com/v1
-OPENAI_MODEL=gpt-4o-mini
 
-# Optional: race multiple models
-OPENAI_MODEL=gemini-2.0-flash,gpt-4o-mini
-HUMANIZE_FALLBACK_MODELS=gpt-4o
+# Primary model (default: gemini-3-flash)
+HUMANIZE_PRIMARY_MODELS=gemini-3-flash
+
+# Fallback (default: gemini-2.5-flash)
+HUMANIZE_FALLBACK_MODELS=gemini-2.5-flash
+
+# Optional: concurrent racing (comma-separated, fastest wins)
+# HUMANIZE_PRIMARY_MODELS=gemini-3-flash,gemini-2.5-flash
+# HUMANIZE_FALLBACK_MODELS=minimax-m2.5
 ```
 
 ---

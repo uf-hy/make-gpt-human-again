@@ -67,13 +67,16 @@ echo "磁盘使用率 92%，建议清理日志" | node scripts/humanize.js
 # 必填
 OPENAI_API_KEY=sk-your-key-here
 OPENAI_API_BASE=https://api.openai.com/v1
-OPENAI_MODEL=gpt-4o-mini
 
-# 可选：并发竞速（逗号分隔）
-OPENAI_MODEL=gemini-2.0-flash,gpt-4o-mini
+# 主力模型（默认 gemini-3-flash）
+HUMANIZE_PRIMARY_MODELS=gemini-3-flash
 
-# 可选：兜底模型
-HUMANIZE_FALLBACK_MODELS=gpt-4o
+# 兜底模型（默认 gemini-2.5-flash）
+HUMANIZE_FALLBACK_MODELS=gemini-2.5-flash
+
+# 可选：并发竞速（逗号分隔，同时跑，最快赢）
+# HUMANIZE_PRIMARY_MODELS=gemini-3-flash,gemini-2.5-flash
+# HUMANIZE_FALLBACK_MODELS=minimax-m2.5
 ```
 
 ---

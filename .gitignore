@@ -1,4 +1,7 @@
-node_modules/
+.env
+state/
+*.bak
+*.bak.*
 *.png
 *.html
-.env
+node_modules/
