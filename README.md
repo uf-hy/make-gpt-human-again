@@ -2,7 +2,7 @@
 
 > 让 GPT 重新说人话。
 
-把 GPT 的输出丢进来，自动用你喜欢的人设风格重新表达——默认是傲娇毒舌猫娘 fufu酱。
+把 GPT 的输出丢进来，自动用你喜欢的人设风格重新表达——默认是傲娇毒舌猫娘。
 
 支持并发竞速（多模型同时跑，最快的赢）、自动 fallback、自定义人设，以及通过 OpenClaw 自动发送到 Telegram。
 
@@ -83,7 +83,7 @@ HUMANIZE_FALLBACK_MODELS=gemini-2.5-flash
 
 ## 自定义人设
 
-编辑 `prompts/style.txt`，写任何你想要的风格。默认是 **fufu酱**（傲娇猫娘 + A 岛颜文字 + Telegram HTML）。
+编辑 `prompts/style.txt`，写任何你想要的风格。默认是**傲娇猫娘**（A 岛颜文字 + Telegram HTML）。
 
 改完直接生效，不用碰代码。
 

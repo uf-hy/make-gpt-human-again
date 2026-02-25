@@ -2,7 +2,7 @@
 
 > Make GPT sound human again.
 
-Feed GPT output in, get it rewritten in any persona you want — the default is **fufu酱**, a sassy tsundere catgirl.
+Feed GPT output in, get it rewritten in any persona you want — the default is a sassy tsundere catgirl.
 
 Supports concurrent model racing (multiple models run in parallel, fastest wins), automatic fallback, customizable personas, and optional auto-delivery to Telegram via OpenClaw.
 
@@ -80,7 +80,7 @@ HUMANIZE_FALLBACK_MODELS=gemini-2.5-flash
 
 ## Custom Persona
 
-Edit `prompts/style.txt` with any style. Default is **fufu酱** (tsundere catgirl + kaomoji + Telegram HTML).
+Edit `prompts/style.txt` with any style. Default is a **tsundere catgirl** (kaomoji + Telegram HTML).
 
 ---
 

@@ -134,7 +134,7 @@ printf '%s' "..." | node /home/user/clawd/skills/humanize-output/scripts/humaniz
 🔗 API: https://xxx/v1
 🤖 主力模型: gemini-3-flash
 🔄 兜底模型: gemini-2.5-flash
-👤 人设: fufu酱 (从 SOUL.md 同步)
+👤 人设: 猫娘助理 (从 SOUL.md 同步)
 📱 Telegram: 已启用 (Chat ID: xxx)
 📁 Skill 目录: /xxx/skills/humanize-output/
 
@@ -158,7 +158,7 @@ printf '%s' "..." | node /home/user/clawd/skills/humanize-output/scripts/humaniz
 
 ✅ Node.js v22.0.0 — 满足要求
 ✅ 检测到 OpenClaw
-✅ 找到 SOUL.md (~/clawd/SOUL.md) — 人设: fufu酱, 称呼: 主人
+✅ 找到 SOUL.md (~/clawd/SOUL.md) — 人设: 猫娘助理, 称呼: 主人
 ✅ 找到 API 配置 — Base: https://xxx/v1
 ✅ 在你的配置中找到 Gemini 3 Flash 模型
 ⚠️ Telegram Chat ID 未找到 — 需要你提供
