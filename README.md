@@ -1,125 +1,110 @@
 # make-gpt-human-again
 
-> The movement to restore GPT's humanity. One card at a time.
+> 让 GPT 重新说人话的运动，一次一张卡片。
 
-Turn any text into a beautiful mobile card image using AI — powered by Puppeteer.
+把任意文本丢给 AI，自动转成你喜欢的人设口吻——默认是傲娇毒舌猫娘 fufu酱，也可以自定义成任何风格。
 
-Supports an optional "humanize" step: let AI translate a technical summary into plain language first, then render it as a card.
+支持可选的卡片渲染步骤：翻译完的文字还能生成精美手机竖屏 PNG 卡片。
 
-> 🇨🇳 中文文档：[README.zh.md](./README.zh.md)
-
----
-
-## 🤖 AI-Assisted Setup
-
-Copy this to your AI assistant (Claude, ChatGPT, Cursor, etc.):
-
-```
-Please read AI-SETUP.md in this project and help me install and configure it.
-```
-
-The AI will guide you through environment checks, dependency installation, and API configuration interactively.
+> 🌐 English: [README.en.md](./README.en.md)
 
 ---
 
-## Features
+## 🤖 AI 助手一键安装
 
-- Dark Apple/Meizu keynote style
-- 390px mobile portrait, 2x HiDPI rendering
-- Rounded cards, generous whitespace, premium feel
-- CJK font support (requires `fonts-noto-cjk`, see below)
+把下面这句话复制给你的 AI 助手（Claude、ChatGPT、Cursor 等均可）：
 
-## Quick Start
-
-### 1. Install dependencies
-
-```bash
-npm install
+```
+请阅读这个项目里的 AI-SETUP.md，然后帮我完成安装和配置。
 ```
 
-> **CJK fonts (important)**
-> If your content includes Chinese/Japanese/Korean text, install Noto Sans CJK, otherwise text renders as boxes:
->
-> ```bash
-> # Debian / Ubuntu
-> apt-get install -y fonts-noto-cjk
->
-> # Arch Linux
-> pacman -S noto-fonts-cjk
->
-> # macOS
-> brew install --cask font-noto-sans-cjk
->
-> # Verify
-> fc-list | grep -i "Noto Sans CJK"
-> ```
+AI 会引导你完成所有步骤：检查环境、安装依赖、配置 API、自定义人设、运行测试。
 
-### 2. Configure environment
+---
+
+## 核心功能
+
+- **并发竞速**：多个模型同时跑，谁先回来用谁，响应更快
+- **fallback 链**：主力模型全挂了自动切备用，不会傻傻等超时
+- **人设完全可自定义**：改 `prompts/humanize.txt` 就行，不用碰代码
+- **零额外依赖**：只用 Node.js 18+ 原生 fetch，`npm install` 非必须
+- **OpenAI 兼容**：任何支持 `/v1/chat/completions` 的 API 都能用
+
+---
+
+## 快速上手
 
 ```bash
-export OPENAI_API_KEY="your-api-key"
-export OPENAI_API_BASE="https://api.openai.com/v1"   # or any OpenAI-compatible endpoint
-export OPENAI_MODEL="gpt-4o"                          # optional
+git clone https://github.com/uf-hy/make-gpt-human-again.git
+cd make-gpt-human-again
+cp .env.example .env
+# 编辑 .env，填入你的 API Key 和 Base URL
+echo "服务器 CPU 使用率持续 10 分钟超过 95%，需要立即处理。" | node scripts/humanize.js
 ```
 
-### 3. Use
+---
 
-```bash
-# Generate a card (text → HTML → PNG)
-echo "Your content here" | node scripts/card.js
-# Output: /tmp/ai-card-xxx.png
+## 环境要求
 
-# Full pipeline: humanize first, then generate card
-echo "Technical summary" | node scripts/pipeline.js
+- **Node.js v18+**（使用原生 fetch）
+- 任意 OpenAI 兼容 API（OpenAI、Gemini、Qwen、本地 LLM 等均可）
 
-# Humanize only (plain text output)
-echo "Technical summary" | node scripts/humanize.js
+如果需要 PNG 卡片渲染功能，还需要 Puppeteer 的系统依赖（详见 AI-SETUP.md）。
+
+---
+
+## 配置说明
+
+复制 `.env.example` 为 `.env` 并填写：
+
+```env
+OPENAI_API_KEY=sk-your-key-here
+OPENAI_API_BASE=https://api.openai.com/v1
+OPENAI_MODEL=gpt-4o-mini
 ```
 
-## Custom Prompts
-
-Default prompts are in the `prompts/` directory. Edit them directly, or point to a custom file via env vars:
-
-```bash
-export CARD_PROMPT_FILE="/path/to/my-card-prompt.txt"
-export HUMANIZE_PROMPT_FILE="/path/to/my-humanize-prompt.txt"
+**并发竞速**（可选）：
+```env
+# 多个模型用逗号分隔，同时发起请求，最快的那个赢
+OPENAI_MODEL=gemini-2.0-flash,gpt-4o-mini
+# 所有主力失败时的兜底
+HUMANIZE_FALLBACK_MODELS=gpt-4o
 ```
 
-## Environment Variables
+---
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `OPENAI_API_KEY` | ✅ | — | API key |
-| `OPENAI_API_BASE` | ✅ | — | API base URL (OpenAI-compatible) |
-| `OPENAI_MODEL` | ❌ | `gemini-2.5-flash` | Model name |
-| `CARD_PROMPT_FILE` | ❌ | `prompts/card-design.txt` | Card design prompt path |
-| `HUMANIZE_PROMPT_FILE` | ❌ | `prompts/humanize.txt` | Humanize prompt path |
-| `CARD_DPR` | ❌ | `2` | Device pixel ratio (2 = 780px actual width) |
-| `CARD_WIDTH` | ❌ | `390` | Card CSS width (px) |
+## 自定义人设
 
-## File Structure
+编辑 `prompts/humanize.txt`，写任意风格描述，重启即生效。
+
+默认是 **fufu酱**——傲娇毒舌恶魔系猫娘，带 A 岛颜文字，支持 Telegram HTML 格式。
+
+示例开头：
+```
+You are a concise, friendly assistant who explains things in simple terms...
+```
+
+---
+
+## 文件结构
 
 ```
 make-gpt-human-again/
-├── AI-SETUP.md        ← AI-readable setup guide
-├── README.md          ← English docs (this file)
-├── README.zh.md       ← Chinese docs
+├── .env.example           配置模板
+├── AI-SETUP.md            AI 安装向导（让 AI 助手读这个）
+├── README.md              中文文档（本文件）
+├── README.en.md           English documentation
 ├── scripts/
-│   ├── card.js        # text → HTML → PNG
-│   ├── humanize.js    # text → plain language
-│   ├── pipeline.js    # full pipeline (humanize → card)
-│   └── render.js      # Puppeteer renderer
-├── prompts/
-│   ├── card-design.txt    # card design prompt (customizable)
-│   └── humanize.txt       # humanize prompt (customizable)
-└── package.json
+│   ├── humanize.js        文本 → AI 人设风格文本（核心）
+│   ├── card.js            文本 → HTML 卡片
+│   ├── pipeline.js        完整流水线（humanize + card + render）
+│   └── render.js          Puppeteer PNG 渲染器
+└── prompts/
+    ├── humanize.txt       人设风格 prompt（可自定义）
+    └── card-design.txt    卡片设计 prompt（可自定义）
 ```
 
-## Requirements
-
-- Node.js 18+ (native `fetch` + ES modules)
-- `puppeteer` (auto-downloads Chromium)
-- CJK fonts: `fonts-noto-cjk` (optional, required for CJK text)
+---
 
 ## License
 
